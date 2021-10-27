@@ -1509,6 +1509,7 @@ TranslationBlock *tb_gen_code(CPUState *cpu,
     }
 
     gen_code_buf = tcg_ctx->code_gen_ptr;
+    jit_write_protect(false);
     tb->tc.ptr = gen_code_buf;
     tb->pc = pc;
     tb->cs_base = cs_base;
