@@ -1,5 +1,4 @@
-Unicorn Engine
-==============
+# Unicorn Engine
 
 [![Join the chat at https://gitter.im/unicorn-engine/chat](https://badges.gitter.im/unicorn-engine/unicorn.svg)](https://gitter.im/unicorn-engine/chat?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build Status](https://travis-ci.org/unicorn-engine/unicorn.svg?branch=master)](https://travis-ci.org/unicorn-engine/unicorn)
@@ -22,33 +21,24 @@ Unicorn offers some unparalleled features:
 
 Further information is available at http://www.unicorn-engine.org
 
-
-License
--------
+## License
 
 This project is released under the [GPL license](COPYING).
 
-
-Compilation & Docs
-------------------
+## Compilation & Docs
 
 See [docs/COMPILE.md](docs/COMPILE.md) file for how to compile and install Unicorn.
 
 More documentation is available in [docs/README.md](docs/README.md).
 
-
-Contact
--------
+## Contact
 
 [Contact us](http://www.unicorn-engine.org/contact/) via mailing list, email or twitter for any questions.
 
+## Contribute
 
-Contribute
-----------
+If you want to contribute, please pick up something from our [Github issues](https://github.com/CryptoKass/unicorn/issues).
 
-If you want to contribute, please pick up something from our [Github issues](https://github.com/unicorn-engine/unicorn/issues).
-
-We also maintain a list of more challenged problems in a [TODO list](https://github.com/unicorn-engine/unicorn/wiki/TODO).
+We also maintain a list of more challenged problems in a [TODO list](https://github.com/CryptoKass/unicorn/wiki/TODO).
 
 [CREDITS.TXT](CREDITS.TXT) records important contributors of our project.
-

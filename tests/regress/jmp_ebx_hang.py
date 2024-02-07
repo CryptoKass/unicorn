@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-"""See https://github.com/unicorn-engine/unicorn/issues/82"""
+"""See https://github.com/CryptoKass/unicorn/issues/82"""
 
 import unicorn
 from unicorn import *

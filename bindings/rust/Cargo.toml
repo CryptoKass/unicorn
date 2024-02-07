@@ -13,7 +13,7 @@ include = [
 ]
 license = "GPL-2.0"
 readme = "README.md"
-repository = "https://github.com/unicorn-engine/unicorn/"
+repository = "https://github.com/CryptoKass/unicorn/"
 description = "Rust bindings for the Unicorn emulator with utility functions"
 build = "build.rs"
 links = "unicorn"

@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-'''https://github.com/unicorn-engine/unicorn/issues/334'''
+'''https://github.com/CryptoKass/unicorn/issues/334'''
 
 from __future__ import print_function
 import regress

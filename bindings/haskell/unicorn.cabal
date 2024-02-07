@@ -6,7 +6,7 @@ version:             0.1.0.0
 category:            FFI, Emulation
 synopsis:            Unicorn CPU emulator engine
 description:         Haskell bindings for the Unicorn CPU emulator engine.
-homepage:            https://github.com/unicorn-engine/unicorn
+homepage:            https://github.com/CryptoKass/unicorn
 author:              Adrian Herrera
 license:             GPL
 copyright:           (c) 2016, Adrian Herrera

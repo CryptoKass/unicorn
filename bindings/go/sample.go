@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/hex"
 	"fmt"
-	uc "github.com/unicorn-engine/unicorn/bindings/go/unicorn"
+	uc "github.com/CryptoKass/unicorn/bindings/go/unicorn"
 	"strings"
 )
 

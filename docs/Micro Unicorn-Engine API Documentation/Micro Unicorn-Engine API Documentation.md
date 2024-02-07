@@ -1,22 +1,22 @@
 # Micro Unicorn-Engine API Documentation
 
-**Warning:** ***This is an unofficial API document by [kabeor](https://github.com/kabeor), If there are any mistakes, welcome to ask.***
+**Warning:** **_This is an unofficial API document by [kabeor](https://github.com/kabeor), If there are any mistakes, welcome to ask._**
 
-**注意：** ***这是由kabeor制作的非官方API参考文档，如有错误欢迎提出，觉得不错可以给个star鼓励我***
+**注意：** **_这是由 kabeor 制作的非官方 API 参考文档，如有错误欢迎提出，觉得不错可以给个 star 鼓励我_**
 
-之前对Capstone反汇编引擎的API分析文档已经被[官方](http://www.capstone-engine.org/documentation.html)收录 https://github.com/kabeor/Micro-Capstone-Engine-API-Documentation  ，在实现自己想要做出的调试器的路上，又遇到了与Capstone同作者的国外大佬aquynh的另一个著名项目Unicorn，不巧的是，详尽的API文档仍然较少，更多的是大篇幅的代码，因此决定继续分析Unicorn框架，包括数据类型，已开放API及其实现。
+之前对 Capstone 反汇编引擎的 API 分析文档已经被[官方](http://www.capstone-engine.org/documentation.html)收录 https://github.com/kabeor/Micro-Capstone-Engine-API-Documentation ，在实现自己想要做出的调试器的路上，又遇到了与 Capstone 同作者的国外大佬 aquynh 的另一个著名项目 Unicorn，不巧的是，详尽的 API 文档仍然较少，更多的是大篇幅的代码，因此决定继续分析 Unicorn 框架，包括数据类型，已开放 API 及其实现。
 
-Unicorn是一个轻量级, 多平台, 多架构的CPU模拟器框架，基于qemu开发，它可以代替CPU模拟代码的执行，常用于恶意代码分析，Fuzz等，该项目被用于Radare2逆向分析框架，GEF(gdb的pwn分析插件)，Pwndbg，Angr符号执行框架等多个著名项目。接下来我也将通过阅读源码和代码实际调用来写一个简单的非官方版本的API手册。
+Unicorn 是一个轻量级, 多平台, 多架构的 CPU 模拟器框架，基于 qemu 开发，它可以代替 CPU 模拟代码的执行，常用于恶意代码分析，Fuzz 等，该项目被用于 Radare2 逆向分析框架，GEF(gdb 的 pwn 分析插件)，Pwndbg，Angr 符号执行框架等多个著名项目。接下来我也将通过阅读源码和代码实际调用来写一个简单的非官方版本的 API 手册。
 
 Blog： kabeor.cn
 
 ## 0x0 开发准备
 
-Unicorn官网:     http://www.unicorn-engine.org
+Unicorn 官网: http://www.unicorn-engine.org
 
-### 自行编译lib和dll方法
+### 自行编译 lib 和 dll 方法
 
-源码： https://github.com/unicorn-engine/unicorn/archive/master.zip
+源码： https://github.com/CryptoKass/unicorn/archive/master.zip
 
 下载后解压
 
@@ -42,13 +42,13 @@ Unicorn官网:     http://www.unicorn-engine.org
 └── tests <- C语言测试用例
 ```
 
-下面演示Windows10使用Visual Studio2019编译
+下面演示 Windows10 使用 Visual Studio2019 编译
 
-打开msvc文件夹，内部结构如下
+打开 msvc 文件夹，内部结构如下
 
 ![image.png](API_Doc_Pic/iyodlNFY7hHEOgS.png)
 
-VS打开unicorn.sln项目文件，解决方案自动载入这些
+VS 打开 unicorn.sln 项目文件，解决方案自动载入这些
 
 ![image.png](API_Doc_Pic/fOnNpSKvjYyc7QB.png)
 
@@ -59,37 +59,36 @@ VS打开unicorn.sln项目文件，解决方案自动载入这些
 生成选项中勾选你需要的支持项即可
 
 项目编译属性为：
+
 1. 使用多字节字符集
 2. 不使用预编译头
 3. 附加选项 /wd4018 /wd4244 /wd4267
-4. 预处理器定义中添加   ` _CRT_SECURE_NO_WARNINGS`
+4. 预处理器定义中添加 ` _CRT_SECURE_NO_WARNINGS`
 
-编译后会在当前文件夹Debug目录下生成unicorn.lib静态编译库和unicorn.dll动态库这样就可以开始使用Unicorn进行开发了
+编译后会在当前文件夹 Debug 目录下生成 unicorn.lib 静态编译库和 unicorn.dll 动态库这样就可以开始使用 Unicorn 进行开发了
 
-编译到最后一项可能会报错系统找不到指定的路径，查看makefile发现问题出现在此处
+编译到最后一项可能会报错系统找不到指定的路径，查看 makefile 发现问题出现在此处
 ![image.png](API_Doc_Pic/YCMNcEVyX8GHoPb.png)
 
-事实上只不过是不能将生成的lib和dll复制到新建的文件夹而已，只需要到生成目录去找即可。
+事实上只不过是不能将生成的 lib 和 dll 复制到新建的文件夹而已，只需要到生成目录去找即可。
 
-官方目前提供的最新已编译版本为1.0.1版本，比较老，建议自己编辑最新版本源码，以获得更多可用API。
-Win32：https://github.com/unicorn-engine/unicorn/releases/download/1.0.1/unicorn-1.0.1-win32.zip
-Win64：https://github.com/unicorn-engine/unicorn/releases/download/1.0.1/unicorn-1.0.1-win64.zip
+官方目前提供的最新已编译版本为 1.0.1 版本，比较老，建议自己编辑最新版本源码，以获得更多可用 API。
+Win32：https://github.com/CryptoKass/unicorn/releases/download/1.0.1/unicorn-1.0.1-win32.zip
+Win64：https://github.com/CryptoKass/unicorn/releases/download/1.0.1/unicorn-1.0.1-win64.zip
 
-**注意： 选x32或x64将影响后面开发的位数**
-
-
+**注意： 选 x32 或 x64 将影响后面开发的位数**
 
 ### 引擎调用测试
 
-新建一个VS项目，将..\unicorn-master\include\unicorn中的头文件以及编译好的lib和dll文件全部拷贝到新建项目的主目录下
+新建一个 VS 项目，将..\unicorn-master\include\unicorn 中的头文件以及编译好的 lib 和 dll 文件全部拷贝到新建项目的主目录下
 
 ![image.png](API_Doc_Pic/I25E9sWcJpGyax7.png)
 
-在VS解决方案中，头文件添加现有项unicorn.h，资源文件中添加unicorn.lib，重新生成解决方案
+在 VS 解决方案中，头文件添加现有项 unicorn.h，资源文件中添加 unicorn.lib，重新生成解决方案
 
 ![image.png](API_Doc_Pic/OVaHwelNQ4tcLmo.png)
 
-接下来测试我们生成的unicorn框架
+接下来测试我们生成的 unicorn 框架
 
 主文件代码如下
 
@@ -160,7 +159,7 @@ int main()
 
 ![image.png](API_Doc_Pic/bpu4r8hgzUvO7Pm.png)
 
-ecx+1和edx-1成功模拟。
+ecx+1 和 edx-1 成功模拟。
 
 ## 0x1 数据类型分析
 
@@ -180,8 +179,6 @@ typedef enum uc_arch {
     UC_ARCH_MAX,
 } uc_arch;
 ```
-
-
 
 ### uc_mode
 
@@ -215,7 +212,7 @@ typedef enum uc_mode {
     UC_MODE_32 = 1 << 2,          // 32-bit 模式
     UC_MODE_64 = 1 << 3,          // 64-bit 模式
 
-    // ppc 
+    // ppc
     UC_MODE_PPC32 = 1 << 2,       // 32-bit 模式 (暂不支持)
     UC_MODE_PPC64 = 1 << 3,       // 64-bit 模式 (暂不支持)
     UC_MODE_QPX = 1 << 4,         // Quad Processing eXtensions 模式 (暂不支持)
@@ -229,11 +226,9 @@ typedef enum uc_mode {
 } uc_mode;
 ```
 
-
-
 ### uc_err
 
-错误类型，是uc_errno()的返回值
+错误类型，是 uc_errno()的返回值
 
 ```cpp
 typedef enum uc_err {
@@ -263,11 +258,9 @@ typedef enum uc_err {
 } uc_err;
 ```
 
-
-
 ### uc_mem_type
 
-UC_HOOK_MEM_*的所有内存访问类型
+UC*HOOK_MEM*\*的所有内存访问类型
 
 ```cpp
 typedef enum uc_mem_type {
@@ -284,11 +277,9 @@ typedef enum uc_mem_type {
 } uc_mem_type;
 ```
 
-
-
 ### uc_hook_type
 
-uc_hook_add()的所有hook类型参数
+uc_hook_add()的所有 hook 类型参数
 
 ```cpp
 typedef enum uc_hook_type {
@@ -326,9 +317,7 @@ typedef enum uc_hook_type {
 } uc_hook_type;
 ```
 
-
-
-### 宏定义Hook类型
+### 宏定义 Hook 类型
 
 ```cpp
 // Hook 所有未映射内存访问的事件
@@ -344,17 +333,15 @@ typedef enum uc_hook_type {
 // Hook 所有非法的内存访问事件
 #define UC_HOOK_MEM_INVALID (UC_HOOK_MEM_UNMAPPED + UC_HOOK_MEM_PROT)
 // Hook 所有有效内存访问的事件
-// 注意: UC_HOOK_MEM_READ 在 UC_HOOK_MEM_READ_PROT 和 UC_HOOK_MEM_READ_UNMAPPED 之前触发 , 
+// 注意: UC_HOOK_MEM_READ 在 UC_HOOK_MEM_READ_PROT 和 UC_HOOK_MEM_READ_UNMAPPED 之前触发 ,
 //       因此这个Hook可能会触发一些无效的读取。
 #define UC_HOOK_MEM_VALID (UC_HOOK_MEM_READ + UC_HOOK_MEM_WRITE + UC_HOOK_MEM_FETCH)
 ```
 
-
-
 ### uc_mem_region
 
-由uc_mem_map()和uc_mem_map_ptr()映射内存区域
-使用uc_mem_regions()检索该内存区域的列表
+由 uc_mem_map()和 uc_mem_map_ptr()映射内存区域
+使用 uc_mem_regions()检索该内存区域的列表
 
 ```cpp
 typedef struct uc_mem_region {
@@ -363,8 +350,6 @@ typedef struct uc_mem_region {
     uint32_t perms; // 区域的内存权限
 } uc_mem_region;
 ```
-
-
 
 ### uc_query_type
 
@@ -379,18 +364,14 @@ typedef enum uc_query_type {
 } uc_query_type;
 ```
 
-
-
 ### uc_context
 
-与uc_context_*()一起使用，管理CPU上下文的不透明存储
+与 uc*context*\*()一起使用，管理 CPU 上下文的不透明存储
 
 ```cpp
 struct uc_context;
 typedef struct uc_context uc_context;
 ```
-
-
 
 ### uc_prot
 
@@ -406,9 +387,7 @@ typedef enum uc_prot {
 } uc_prot;
 ```
 
-
-
-## 0x2 API分析
+## 0x2 API 分析
 
 ### uc_version
 
@@ -416,7 +395,7 @@ typedef enum uc_prot {
 unsigned int uc_version(unsigned int *major, unsigned int *minor);
 ```
 
-用于返回Unicorn API主次版本信息
+用于返回 Unicorn API 主次版本信息
 
 ```
 @major: API主版本号
@@ -462,9 +441,7 @@ int main()
 
 ![image.png](API_Doc_Pic/q3JtOQRPl5xTFKp.png)
 
-得到版本号1.0.0
-
-
+得到版本号 1.0.0
 
 ### uc_arch_supported
 
@@ -472,7 +449,7 @@ int main()
 bool uc_arch_supported(uc_arch arch);
 ```
 
-确定Unicorn是否支持当前架构
+确定 Unicorn 是否支持当前架构
 
 ```
  @arch: 架构类型 (UC_ARCH_*)
@@ -530,15 +507,13 @@ int main()
 
 ![image.png](API_Doc_Pic/NExsavSgu4yMbBQ.png)
 
-
-
 ### uc_open
 
 ```c
 uc_err uc_open(uc_arch arch, uc_mode mode, uc_engine **uc);
 ```
 
-创建新的Unicorn实例
+创建新的 Unicorn 实例
 
 ```
 @arch: 架构类型 (UC_ARCH_*)
@@ -695,7 +670,7 @@ uc_err uc_open(uc_arch arch, uc_mode mode, uc_engine **result)
 }
 ```
 
-**注意： uc_open会申请堆内存，使用完必须用uc_close释放，否则会发生泄露**
+**注意： uc_open 会申请堆内存，使用完必须用 uc_close 释放，否则会发生泄露**
 
 使用示例：
 
@@ -708,7 +683,7 @@ int main()
 {
     uc_engine* uc;
     uc_err err;
-    
+
     //// 初始化 X86-32bit 模式模拟器
     err = uc_open(UC_ARCH_X86, UC_MODE_32, &uc);
     if (err != UC_ERR_OK) {
@@ -728,7 +703,7 @@ int main()
 
     if (!err)
         cout << "uc引擎关闭成功" << endl;
-        
+
     return 0;
 }
 ```
@@ -737,15 +712,13 @@ int main()
 
 ![image.png](API_Doc_Pic/dqKBwAWUL7XvypE.png)
 
-
-
 ### uc_close
 
 ```c
 uc_err uc_close(uc_engine *uc);
 ```
 
-关闭一个uc实例，将释放内存。关闭后无法恢复。
+关闭一个 uc 实例，将释放内存。关闭后无法恢复。
 
 ```
 @uc: 指向由 uc_open() 返回的指针
@@ -825,14 +798,12 @@ uc_err uc_close(uc_engine *uc)
     // 最后释放uc自身
     memset(uc, 0, sizeof(*uc));
     free(uc);
-    
+
     return UC_ERR_OK;
 }
 ```
 
-使用实例同uc_open()
-
-
+使用实例同 uc_open()
 
 ### uc_query
 
@@ -911,7 +882,7 @@ int main()
     }
     if (!err)
         cout << "uc实例关闭成功" << endl;
-        
+
     return 0;
 }
 ```
@@ -920,9 +891,7 @@ int main()
 
 ![image.png](API_Doc_Pic/ZtRKvUoaPTlshJ4.png)
 
-架构查询结果为4，对应的正是UC_ARCH_X86
-
-
+架构查询结果为 4，对应的正是 UC_ARCH_X86
 
 ### uc_errno
 
@@ -930,7 +899,7 @@ int main()
 uc_err uc_errno(uc_engine *uc);
 ```
 
-当某个API函数失败时，报告最后的错误号，一旦被访问，uc_errno可能不会保留原来的值。
+当某个 API 函数失败时，报告最后的错误号，一旦被访问，uc_errno 可能不会保留原来的值。
 
 ```
 @uc: uc_open() 返回的句柄
@@ -977,7 +946,7 @@ int main()
     }
     if (!err)
         cout << "uc实例关闭成功" << endl;
-        
+
     return 0;
 }
 ```
@@ -986,9 +955,7 @@ int main()
 
 ![image.png](API_Doc_Pic/IZhyWrGebA5tT4i.png)
 
-无错误，输出错误号为0
-
-
+无错误，输出错误号为 0
 
 ### uc_strerror
 
@@ -1071,7 +1038,7 @@ int main()
 {
     uc_engine* uc;
     uc_err err;
-    
+
     err = uc_open(UC_ARCH_X86, UC_MODE_32, &uc);
     if (err != UC_ERR_OK) {
         printf("Failed on uc_open() with error returned: %u\n", err);
@@ -1090,7 +1057,7 @@ int main()
     }
     if (!err)
         cout << "uc实例关闭成功" << endl;
-        
+
     return 0;
 }
 ```
@@ -1098,8 +1065,6 @@ int main()
 输出
 
 ![image.png](API_Doc_Pic/MbZk8KjQFqJOxmd.png)
-
-
 
 ### uc_reg_write
 
@@ -1131,7 +1096,7 @@ uc_err uc_reg_write_batch(uc_engine *uc, int *ids, void *const *vals, int count)
     if (uc->reg_write)
         ret = uc->reg_write(uc, (unsigned int *)ids, vals, count);    //结构体中写入
     else
-        return UC_ERR_EXCEPTION; 
+        return UC_ERR_EXCEPTION;
 
     return ret;
 }
@@ -1169,7 +1134,7 @@ int main()
     }
     if (!err)
         cout << "uc实例关闭成功" << endl;
-    
+
     return 0;
 }
 ```
@@ -1177,8 +1142,6 @@ int main()
 输出
 
 ![image.png](API_Doc_Pic/DkztJcigHCdmnRp.png)
-
-
 
 ### uc_reg_read
 
@@ -1209,7 +1172,7 @@ uc_err uc_reg_read_batch(uc_engine *uc, int *ids, void **vals, int count)
     if (uc->reg_read)
         uc->reg_read(uc, (unsigned int *)ids, vals, count);
     else
-        return -1;  
+        return -1;
 
     return UC_ERR_OK;
 }
@@ -1239,7 +1202,7 @@ int main()
     err = uc_reg_write(uc, UC_X86_REG_ECX, &r_eax);
     if (!err)
         cout << "写入成功: " << r_eax << endl;
-    
+
     int recv_eax;
     err = uc_reg_read(uc, UC_X86_REG_ECX, &recv_eax);
     if (!err)
@@ -1260,8 +1223,6 @@ int main()
 输出
 
 ![image.png](API_Doc_Pic/ABkexFCfphu3zIg.png)
-
-
 
 ### uc_reg_write_batch
 
@@ -1289,7 +1250,7 @@ uc_err uc_reg_write_batch(uc_engine *uc, int *ids, void *const *vals, int count)
     if (uc->reg_write)
         ret = uc->reg_write(uc, (unsigned int *)ids, vals, count);
     else
-        return UC_ERR_EXCEPTION; 
+        return UC_ERR_EXCEPTION;
 
     return ret;
 }
@@ -1367,8 +1328,6 @@ int main()
 
 ![image.png](API_Doc_Pic/l1AhdxgKE2U3tZB.png)
 
-
-
 ### uc_reg_read_batch
 
 ```c
@@ -1394,15 +1353,13 @@ uc_err uc_reg_read_batch(uc_engine *uc, int *ids, void **vals, int count)
     if (uc->reg_read)
         uc->reg_read(uc, (unsigned int *)ids, vals, count);
     else
-        return -1; 
+        return -1;
 
     return UC_ERR_OK;
 }
 ```
 
-使用示例同uc_reg_write_batch()。
-
-
+使用示例同 uc_reg_write_batch()。
 
 ### uc_mem_write
 
@@ -1490,7 +1447,7 @@ int main()
         printf("Failed on uc_open() with error returned: %u\n", err);
         return -1;
     }
-    
+
     uc_mem_map(uc, ADDRESS, 2 * 1024 * 1024, UC_PROT_ALL);
 
     if (uc_mem_write(uc, ADDRESS, X86_CODE32, sizeof(X86_CODE32) - 1)) {
@@ -1511,7 +1468,7 @@ int main()
     if (err != UC_ERR_OK) {
         printf("Failed on uc_close() with error returned: %u\n", err);
         return -1;
-    }    
+    }
     return 0;
 }
 ```
@@ -1519,8 +1476,6 @@ int main()
 输出
 
 ![image.png](API_Doc_Pic/l4HhgDzcJIVvFNU.png)
-
-
 
 ### uc_mem_read
 
@@ -1577,9 +1532,7 @@ uc_err uc_mem_read(uc_engine *uc, uint64_t address, void *_bytes, size_t size)
 }
 ```
 
-使用示例同uc_mem_write()
-
-
+使用示例同 uc_mem_write()
 
 ### uc_emu_start
 
@@ -1727,15 +1680,15 @@ int main()
 {
     uc_engine* uc;
     uc_err err;
-    
+
     int r_eax = 0x111;
-    
+
     err = uc_open(UC_ARCH_X86, UC_MODE_32, &uc);
     if (err != UC_ERR_OK) {
         printf("Failed on uc_open() with error returned: %u\n", err);
         return -1;
-    }   
-    
+    }
+
     uc_mem_map(uc, ADDRESS, 2 * 1024 * 1024, UC_PROT_ALL);
 
     if (uc_mem_write(uc, ADDRESS, X86_CODE32, sizeof(X86_CODE32) - 1)) {
@@ -1760,7 +1713,7 @@ int main()
         printf("Failed on uc_close() with error returned: %u\n", err);
         return -1;
     }
-    
+
     return 0;
 }
 ```
@@ -1768,8 +1721,6 @@ int main()
 输出
 
 ![image.png](API_Doc_Pic/K4HMijIVt6lofvT.png)
-
-
 
 ### uc_emu_stop
 
@@ -1779,7 +1730,7 @@ uc_err uc_emu_stop(uc_engine *uc);
 
 停止模拟
 
-通常是从通过 tracing API注册的回调函数中调用。
+通常是从通过 tracing API 注册的回调函数中调用。
 
 ```
 @uc: uc_open() 返回的句柄
@@ -1812,8 +1763,6 @@ uc_err uc_emu_stop(uc_engine *uc)
 uc_emu_stop(uc);
 ```
 
-
-
 ### uc_hook_add
 
 ```c
@@ -1821,7 +1770,7 @@ uc_err uc_hook_add(uc_engine *uc, uc_hook *hh, int type, void *callback,
         void *user_data, uint64_t begin, uint64_t end, ...);
 ```
 
-注册hook事件的回调，当hook事件被触发将会进行回调。
+注册 hook 事件的回调，当 hook 事件被触发将会进行回调。
 
 ```
  @uc: uc_open() 返回的句柄
@@ -2041,9 +1990,7 @@ int main()
 
 ![image.png](API_Doc_Pic/aU1lbmxMjXA5g3K.png)
 
-对每条指令都进行hook
-
-
+对每条指令都进行 hook
 
 ### uc_hook_del
 
@@ -2051,7 +1998,7 @@ int main()
 uc_err uc_hook_del(uc_engine *uc, uc_hook hh);
 ```
 
-删除一个已注册的hook事件
+删除一个已注册的 hook 事件
 
 ```
 @uc: uc_open() 返回的句柄
@@ -2094,8 +2041,6 @@ if ((err = uc_hook_del(uc, &sys_hook))) {
 }
 ```
 
-
-
 ### uc_mem_map
 
 ```c
@@ -2132,9 +2077,7 @@ uc_err uc_mem_map(uc_engine *uc, uint64_t address, size_t size, uint32_t perms)
 }
 ```
 
-使用示例同uc_hook_add。
-
-
+使用示例同 uc_hook_add。
 
 ### uc_mem_map_ptr
 
@@ -2176,9 +2119,7 @@ uc_err uc_mem_map_ptr(uc_engine *uc, uint64_t address, size_t size, uint32_t per
 }
 ```
 
-使用示例同uc_mem_map
-
-
+使用示例同 uc_mem_map
 
 ### uc_mem_unmap
 
@@ -2259,8 +2200,6 @@ if ((err = uc_mem_unmap(uc, BASE, 0x1000))) {
     return 1;
 }
 ```
-
-
 
 ### uc_mem_protect
 
@@ -2353,9 +2292,7 @@ if ((err = uc_mem_protect(uc, BASE, 0x1000, UC_PROT_ALL))) {  //可读可写可�
 }
 ```
 
-
-
-###  uc_mem_regions
+### uc_mem_regions
 
 ```c
 uc_err uc_mem_regions(uc_engine *uc, uc_mem_region **regions, uint32_t *count);
@@ -2363,7 +2300,7 @@ uc_err uc_mem_regions(uc_engine *uc, uc_mem_region **regions, uint32_t *count);
 
 检索由 uc_mem_map() 和 uc_mem_map_ptr() 映射的内存的信息。
 
-这个API为@regions分配内存，用户之后必须通过free()释放这些内存来避免内存泄漏。
+这个 API 为@regions 分配内存，用户之后必须通过 free()释放这些内存来避免内存泄漏。
 
 ```
 @uc: uc_open() 返回的句柄
@@ -2435,7 +2372,7 @@ int main()
     }
 
     cout << "起始地址： 0x" << hex << region->begin << "  结束地址： 0x" << hex << region->end << "  内存权限：  " <<region->perms << "  已申请内存块数： " << count << endl;
-      
+
     if ((err = uc_free(region))) {    ////注意释放内存
         uc_perror("uc_free", err);
         return 1;
@@ -2448,8 +2385,6 @@ int main()
 输出
 
 ![image.png](API_Doc_Pic/kbrF7NdV6LDxnYI.png)
-
-
 
 ### uc_free
 
@@ -2480,9 +2415,7 @@ void g_free(gpointer ptr)
 }
 ```
 
-使用示例同uc_mem_regions
-
-
+使用示例同 uc_mem_regions
 
 ### uc_context_alloc
 
@@ -2490,7 +2423,7 @@ void g_free(gpointer ptr)
 uc_err uc_context_alloc(uc_engine *uc, uc_context **context);
 ```
 
-分配一个可以与uc_context_{save,restore}一起使用的区域来执行CPU上下文的快速保存/回滚，包括寄存器和内部元数据。上下文不能在具有不同架构或模式的引擎实例之间共享。
+分配一个可以与 uc*context*{save,restore}一起使用的区域来执行 CPU 上下文的快速保存/回滚，包括寄存器和内部元数据。上下文不能在具有不同架构或模式的引擎实例之间共享。
 
 ```
 @uc: uc_open() 返回的句柄
@@ -2625,15 +2558,13 @@ int main()
 
 ![image.png](API_Doc_Pic/juNPWvwGUlraKRh.png)
 
-
-
 ### uc_context_save
 
 ```c
 uc_err uc_context_save(uc_engine *uc, uc_context *context);
 ```
 
-保存当前CPU上下文
+保存当前 CPU 上下文
 
 ```
 @uc: uc_open() 返回的句柄
@@ -2653,9 +2584,7 @@ uc_err uc_context_save(uc_engine *uc, uc_context *context)
 }
 ```
 
-使用示例同uc_context_alloc()
-
-
+使用示例同 uc_context_alloc()
 
 ### uc_context_restore
 
@@ -2663,7 +2592,7 @@ uc_err uc_context_save(uc_engine *uc, uc_context *context)
 uc_err uc_context_restore(uc_engine *uc, uc_context *context);
 ```
 
-恢复已保存的CPU上下文
+恢复已保存的 CPU 上下文
 
 ```
 @uc: uc_open() 返回的句柄
@@ -2683,9 +2612,7 @@ uc_err uc_context_restore(uc_engine *uc, uc_context *context)
 }
 ```
 
-使用示例同uc_context_alloc()
-
-
+使用示例同 uc_context_alloc()
 
 ### uc_context_size
 
@@ -2693,7 +2620,7 @@ uc_err uc_context_restore(uc_engine *uc, uc_context *context)
 size_t uc_context_size(uc_engine *uc);
 ```
 
-返回存储cpu上下文所需的大小。可以用来分配一个缓冲区来包含cpu上下文，并直接调用uc_context_save。
+返回存储 cpu 上下文所需的大小。可以用来分配一个缓冲区来包含 cpu 上下文，并直接调用 uc_context_save。
 
 ```
 @uc: uc_open() 返回的句柄
@@ -2748,7 +2675,4 @@ static size_t cpu_context_size(uc_arch arch, uc_mode mode)
 }
 ```
 
-使用示例同uc_context_alloc()
-
-
-
+使用示例同 uc_context_alloc()

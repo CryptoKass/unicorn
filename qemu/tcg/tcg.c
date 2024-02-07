@@ -1762,7 +1762,7 @@ static void tcg_liveness_analysis(TCGContext *s)
                     // but we should refresh TCG globals In-Memory states,
                     // otherwise, important CPU states(especially conditional flags) might be forgotten,
                     // result in wrongly generated host code that run into wrong branch.
-                    // Refer to https://github.com/unicorn-engine/unicorn/issues/287 for further information
+                    // Refer to https://github.com/CryptoKass/unicorn/issues/287 for further information
                     else
                         tcg_la_br_end(s, mem_temps);
                 } else if (def->flags & TCG_OPF_SIDE_EFFECTS) {

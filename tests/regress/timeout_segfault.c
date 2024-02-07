@@ -6,7 +6,7 @@ emulation has ended. It triggers an intermittent segfault when _timeout_fn()
 tries to call uc_emu_stop() after emulation has already been cleaned up. This
 code is the same as samples/sample_arm.c, except that it adds a timeout on each
 call to uc_emu_start(). See issue #78 for more details:
-https://github.com/unicorn-engine/unicorn/issues/78
+https://github.com/CryptoKass/unicorn/issues/78
 */
 
 #include <unicorn/unicorn.h>

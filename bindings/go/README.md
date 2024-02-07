@@ -1,6 +1,6 @@
 To download/update the Unicorn Go bindings, run:
 
-    go get -u github.com/unicorn-engine/unicorn/bindings/go
+    go get -u github.com/CryptoKass/unicorn/bindings/go
 
 A very basic usage example follows
 
@@ -10,7 +10,7 @@ _(Does not handle most errors for brevity. Please see sample.go for a more hygen
 
     import (
         "fmt"
-        uc "github.com/unicorn-engine/unicorn/bindings/go/unicorn"
+        uc "github.com/CryptoKass/unicorn/bindings/go/unicorn"
     )
 
     func main() {

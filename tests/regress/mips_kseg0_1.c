@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 // Test for the MIPS kseg0 and kseg1 memory segments.
-// See issue https://github.com/unicorn-engine/unicorn/issues/217
+// See issue https://github.com/CryptoKass/unicorn/issues/217
 // The kseg0 address range 0x80000000-0x9FFFFFFF is not mapped through the MMU,
 // but instead is directly translated to low ram by masking off the high address bit.
 // Similarly, the address range kseg1 0xA00000000-0xBFFFFFF is translated directly to

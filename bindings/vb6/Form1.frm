@@ -51,8 +51,8 @@ Dim hContext As Long
 
 
 'test sample ported from: (requires unicorn 1.0 for success)
-'   https://github.com/unicorn-engine/unicorn/blob/master/tests/unit/test_pc_change.c
-'   https://github.com/unicorn-engine/unicorn/issues/210
+'   https://github.com/CryptoKass/unicorn/blob/master/tests/unit/test_pc_change.c
+'   https://github.com/CryptoKass/unicorn/issues/210
 
 Private Sub Form_Load()
     

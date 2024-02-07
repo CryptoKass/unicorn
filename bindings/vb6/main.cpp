@@ -410,7 +410,7 @@ uc_err __stdcall get_memMap(uc_engine *uc, _CollectionPtr *pColl){
 	 addStr(*pColl,tmp);
    }
 
-   //free(regions); //https://github.com/unicorn-engine/unicorn/pull/373#issuecomment-271187118
+   //free(regions); //https://github.com/CryptoKass/unicorn/pull/373#issuecomment-271187118
    
    uc_free((void*)regions);
    return err;

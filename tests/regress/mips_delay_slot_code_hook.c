@@ -1,6 +1,6 @@
 /*
 Test for code hook being called for instructions in branch delay slot in MIPS cpu.
-See issue https://github.com/unicorn-engine/unicorn/issues/290
+See issue https://github.com/CryptoKass/unicorn/issues/290
 
 The code hook should be called for every instruction executed.
 This test checks that the code hook is correctly called for instructions in branch delay slots.

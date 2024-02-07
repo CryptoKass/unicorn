@@ -3,7 +3,7 @@
 
 # Added by Peter Mackay, relating to issue 571
 # "ARM NEON/VFP support seems to exist but is disabled by default"
-# https://github.com/unicorn-engine/unicorn/issues/571
+# https://github.com/CryptoKass/unicorn/issues/571
 
 from unicorn import *
 from unicorn.arm_const import *
